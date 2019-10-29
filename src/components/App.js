@@ -1,14 +1,15 @@
 import React, { Component } from "react";
+import Page from "./Game/Page";
 
-import "../styles/style.scss";
+// Semantic CSS
+import "semantic-ui-css/semantic.min.css";
+
+// CSS entry
+import "../css/app.scss";
 
 class App extends Component {
   render() {
-    return (
-      <div className="App">
-        <h1>Hello world!</h1>
-      </div>
-    );
+    return <Page />;
   }
 }
 

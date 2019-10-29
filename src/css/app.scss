@@ -1,0 +1,27 @@
+// Body
+body {
+  color: #666666;
+}
+
+// Card
+.ui.card {
+  width: 100%;
+}
+
+.content > .header {
+  color: #666666 !important;
+}
+
+.players .ui.one.cards > .card {
+  cursor: pointer;
+}
+
+// Message
+.ui.info.message .header {
+  padding: 5px;
+}
+
+// Colors
+.grey {
+  color: #666666 !important;
+}
