@@ -1,0 +1,14 @@
+@font-face {
+  font-family: "Open Sans", sans-serif;
+  src: font-url("../fonts/OpenSans-Bold.ttf") format("truetype"),
+    font-url("../fonts/OpenSans-Italic.ttf") format("truetype"),
+    font-url("../fonts/OpenSans-Light.ttf") format("truetype"),
+    font-url("../fonts/OpenSans-Regular.ttf") format("truetype");
+}
+
+.hello {
+  color: red;
+  background: url("../images/placeholder.png");
+  font-family: "Open Sans", sans-serif;
+  font-weight: bold;
+}

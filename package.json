@@ -1,0 +1,36 @@
+{
+  "name": "paper-rock-scissors-amban",
+  "version": "1.0.0",
+  "description": "#### Running the project + Clone the project you local machine. + Install dependencies with **npm install** and run with **npm start**",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --open",
+    "watch": "webpack --watch",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/birhanuh/paper-rock-sissors-amban.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/birhanuh/paper-rock-sissors-amban/issues"
+  },
+  "homepage": "https://github.com/birhanuh/paper-rock-sissors-amban#readme",
+  "devDependencies": {
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^3.2.0",
+    "file-loader": "^4.2.0",
+    "html-webpack-plugin": "^3.2.0",
+    "style-loader": "^1.0.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.9.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15"
+  }
+}
