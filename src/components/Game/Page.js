@@ -17,7 +17,9 @@ class Page extends PureComponent {
         <main className="main">
           <Game />
         </main>
-        <footer></footer>
+        <footer>
+          <small>Copyright © Birhanu Hailemariam (developer). 2019</small>
+        </footer>
       </section>
     );
   }
