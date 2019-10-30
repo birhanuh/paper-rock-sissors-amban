@@ -6,16 +6,41 @@ body {
 // Card
 .ui.card {
   width: 100%;
-}
-
-.content > .header {
-  color: #666666 !important;
+  > .content:after {
+    display: none;
+  }
 }
 
 .players .ui.one.cards > .card {
   cursor: pointer;
 }
 
+.ui.card > .content {
+  .header {
+    color: #666666 !important;
+  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .score {
+    align-self: flex-end;
+  }
+}
+
+.ui.one.cards {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.user .ui.segment {
+  i {
+    cursor: pointer;
+  }
+  i.disabled {
+    cursor: no-drop;
+  }
+}
 // Message
 .ui.info.message .header {
   padding: 5px;
@@ -24,4 +49,14 @@ body {
 // Colors
 .grey {
   color: #666666 !important;
+}
+
+// Segment
+.ui.basic.vertical.padded.segment.actions {
+  display: flex;
+  justify-content: space-between;
+  h1.header {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
 }

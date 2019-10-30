@@ -12,39 +12,92 @@ import {
 class Game extends PureComponent {
   state = {
     gameOnProgress: false,
-    timeLeft: 10
+    timeLeft: 0,
+    computerThrew: -1,
+    userThrew: -1,
+    userPaperIcon: "hand paper outline",
+    userRockIcon: "hand rock outline",
+    userScissorsIcon: "hand scissors outline",
+    computerPaperIcon: "hand paper outline",
+    computeRrockIcon: "hand rock outline",
+    computerScissorsIcon: "hand scissors outline"
   };
 
-  UNSAFE_componentWillMount() {}
+  UNSAFE_componentWillUpdate(nextProps, nextState) {
+    console.log("Was updated", !!nextState);
+    // if (
+    //   nextState.gameOnProgress &&
+    //   nextState.selections.computer &&
+    //   nextState.timeLeft === 0
+    // ) {
+    //   // Computer starts playing
+    //   this.computerPlayingAlgorith();
+    // }
+  }
 
   handleStart = () => {
-    console.log("Start button clicked.");
+    // Reset state
+    this.setState({
+      computerThrew: -1,
+      userThrew: -1,
+      userPaperIcon: "hand paper outline",
+      userRockIcon: "hand rock outline",
+      userScissorsIcon: "hand scissors outline",
+      computerPaperIcon: "hand paper outline",
+      computeRrockIcon: "hand rock outline",
+      computerScissorsIcon: "hand scissors outline"
+    });
+
+    // Countdown
     this.timeLeftCountdown();
+
+    // Computer starts playing
+    //this.computerPlayingAlgorith();
   };
 
   timeLeftCountdown = () => {
     const self = this;
-    let timeLeft = Object.assign(this.state.timeLeft);
 
-    var timeLeftCounter = setInterval(function() {
-      // Decrement time left
-      self.setState({
-        timeLeft: (timeLeft -= 1)
-      });
+    let timeLeft = 5;
 
-      // Set progress to true
+    self.setState({
+      timeLeft
+    });
+
+    let randomNum = Math.floor(Math.random() * 3);
+
+    let timeLeftCounter = setInterval(function() {
+      // Decrement time left and set progress to true
       self.setState({
+        timeLeft: (timeLeft -= 1),
         gameOnProgress: true
       });
 
-      if (timeLeft <= 0) {
+      // Computer throwing alogrithm
+      if (timeLeft === 0) {
+        if (randomNum === 0) {
+          self.setState({
+            computerPaperIcon: "hand paper",
+            computerThrew: randomNum
+          });
+        } else if (randomNum === 1) {
+          self.setState({
+            computeRrockIcon: "hand rock",
+            computerThrew: randomNum
+          });
+        } else if (randomNum === 2) {
+          self.setState({
+            computerScissorsIcon: "hand scissors",
+            computerThrew: randomNum
+          });
+        }
+      }
+
+      if (timeLeft < 1) {
         // Clear interval
         clearInterval(timeLeftCounter);
 
         // Reset time left and game state
-        self.setState({
-          timeLeft: 10
-        });
         self.setState({
           gameOnProgress: false
         });
@@ -52,8 +105,103 @@ class Game extends PureComponent {
     }, 1000);
   };
 
+  handleUserThrow = (throwedNum, event) => {
+    console.log("Handle user throw", throwedNum);
+
+    if (throwedNum === 0) {
+      this.setState({
+        userPaperIcon: "hand paper",
+        userThrew: throwedNum
+      });
+    } else if (throwedNum === 1) {
+      this.setState({
+        userRockIcon: "hand rock",
+        userThrew: throwedNum
+      });
+    } else if (throwedNum === 2) {
+      this.setState({
+        userScissorsIcon: "hand scissors",
+        userThrew: throwedNum
+      });
+    }
+  };
+
+  computerPlayingAlgorith = () => {
+    const self = this;
+
+    const { gameOnProgress, timeLeft } = this.state;
+
+    let randomNum = Math.floor(Math.random() * 3);
+
+    let trickUser = setInterval(function() {
+      console.log("XXX: ", randomNum, gameOnProgress);
+      if (gameOnProgress && timeLeft === 0) {
+        if (randomNum === 0) {
+          self.setState({
+            computerPaperIcon: "hand paper"
+          });
+        } else if (randomNum === 1) {
+          self.setState({
+            computeRrockIcon: "hand rock"
+          });
+        } else if (randomNum === 2) {
+          self.setState({
+            computerScissorsIcon: "hand scissors"
+          });
+        }
+      } else {
+        // Clear interval
+        clearInterval(trickUser);
+      }
+    }, 10000);
+  };
+
+  computerOpponentTrickingAlgorithm = () => {
+    const self = this;
+
+    console.log("XXXddd", self.state.gameOnProgress);
+    let trickUser = setInterval(function() {
+      let randomNum = Math.floor(Math.random() * 3);
+
+      console.log("XXX: ", randomNum);
+      if (self.state.gameOnProgress) {
+        if (randomNum === 0) {
+          self.setState({
+            computerPaperIcon: "hand paper",
+            computeRrockIcon: "hand rock outline",
+            computerScissorsIcon: "hand scissors outline"
+          });
+        } else if (randomNum === 1) {
+          self.setState({
+            computerPaperIcon: "hand paper outline",
+            computeRrockIcon: "hand rock",
+            computerScissorsIcon: "hand scissors outline"
+          });
+        } else if (randomNum === 2) {
+          self.setState({
+            computerPaperIcon: "hand paper outline",
+            computeRrockIcon: "hand rock outline",
+            computerScissorsIcon: "hand scissors"
+          });
+        }
+      } else {
+        // Clear interval
+        clearInterval(trickUser);
+      }
+    }, 10000);
+  };
+
   render() {
-    const { timeLeft, gameOnProgress } = this.state;
+    const {
+      timeLeft,
+      gameOnProgress,
+      userPaperIcon,
+      userRockIcon,
+      userScissorsIcon,
+      computerPaperIcon,
+      computeRrockIcon,
+      computerScissorsIcon
+    } = this.state;
 
     return (
       <Segment vertical className="game">
@@ -68,22 +216,25 @@ class Game extends PureComponent {
                 <Message.Header>Good luck!</Message.Header>
                 {/* <p>Did you know it's been a while?</p> */}
               </Message>
-              <Segment padded basic vertical>
+              <Segment padded basic vertical className="actions">
                 <Button
                   size="huge"
                   color="green"
                   disabled={gameOnProgress}
                   onClick={this.handleStart}
                 >
-                  Start
+                  Play
                 </Button>
                 <Header
                   as="h1"
-                  color={timeLeft < 4 ? "red" : "grey"}
+                  color={timeLeft < 1 ? "red" : "grey"}
                   textAlign="center"
                 >
                   <Header.Content>{timeLeft}</Header.Content>
                 </Header>
+                <Button size="huge" basic color="grey">
+                  Reset game
+                </Button>
               </Segment>
             </Grid.Column>
           </Grid>
@@ -94,56 +245,72 @@ class Game extends PureComponent {
               <Card>
                 <Card.Content>
                   <Card.Header>You</Card.Header>
-                  <Header as="h2" textAlign="center">
-                    <Header.Content>0</Header.Content>
-                  </Header>
+                  <div className="score">
+                    <Header as="h2" style={{ marginBottom: "0" }}>
+                      <Header.Content>0</Header.Content>
+                    </Header>
+                    <Card.Meta>Score</Card.Meta>
+                  </div>
                 </Card.Content>
                 <Card.Content>
                   <Card.Group itemsPerRow={1} textAlign="center">
-                    <Card color="red">
-                      <Card.Content>
-                        <Icon color="grey" name="hand paper" size="huge" />
-                      </Card.Content>
-                    </Card>
-                    <Card color="red">
-                      <Card.Content>
-                        <Icon color="grey" name="hand rock" size="huge" />
-                      </Card.Content>
-                    </Card>
-                    <Card color="red">
-                      <Card.Content>
-                        <Icon color="grey" name="hand scissors" size="huge" />
-                      </Card.Content>
-                    </Card>
+                    <Segment padded basic vertical>
+                      <Icon
+                        color="grey"
+                        disabled={!gameOnProgress}
+                        name={userPaperIcon}
+                        size="huge"
+                        onClick={this.handleUserThrow.bind(this, 0)}
+                      />
+                    </Segment>
+                    <Segment padded basic vertical>
+                      <Icon
+                        color="grey"
+                        disabled={!gameOnProgress}
+                        name={userRockIcon}
+                        size="huge"
+                        onClick={this.handleUserThrow.bind(this, 1)}
+                      />
+                    </Segment>
+                    <Segment padded basic vertical>
+                      <Icon
+                        color="grey"
+                        disabled={!gameOnProgress}
+                        name={userScissorsIcon}
+                        size="huge"
+                        onClick={this.handleUserThrow.bind(this, 2)}
+                      />
+                    </Segment>
                   </Card.Group>
                 </Card.Content>
               </Card>
             </Grid.Column>
-            <Grid.Column className="computer" textAlign="center">
+            <Grid.Column className="computer">
               <Card>
                 <Card.Content>
-                  <Card.Header textAlign="left">Computer</Card.Header>
-                  <Header as="h2" textAlign="center">
-                    <Header.Content>0</Header.Content>
-                  </Header>
+                  <Card.Header>Computer</Card.Header>
+                  <div className="score">
+                    <Header as="h2" style={{ marginBottom: "0" }}>
+                      <Header.Content>0</Header.Content>
+                    </Header>
+                    <Card.Meta>Score</Card.Meta>
+                  </div>
                 </Card.Content>
                 <Card.Content>
                   <Card.Group itemsPerRow={1} textAlign="center">
-                    <Card color="red">
-                      <Card.Content>
-                        <Icon color="grey" name="hand paper" size="huge" />
-                      </Card.Content>
-                    </Card>
-                    <Card color="red">
-                      <Card.Content>
-                        <Icon color="grey" name="hand rock" size="huge" />
-                      </Card.Content>
-                    </Card>
-                    <Card color="red">
-                      <Card.Content>
-                        <Icon color="grey" name="hand scissors" size="huge" />
-                      </Card.Content>
-                    </Card>
+                    <Segment padded basic vertical>
+                      <Icon color="grey" name={computerPaperIcon} size="huge" />
+                    </Segment>
+                    <Segment padded basic vertical>
+                      <Icon color="grey" name={computeRrockIcon} size="huge" />
+                    </Segment>
+                    <Segment padded basic vertical>
+                      <Icon
+                        color="grey"
+                        name={computerScissorsIcon}
+                        size="huge"
+                      />
+                    </Segment>
                   </Card.Group>
                 </Card.Content>
               </Card>
