@@ -12,7 +12,7 @@ import {
 class Game extends PureComponent {
   state = {
     gameOnProgress: false,
-    timeLeft: 0,
+    timeLeft: 5,
     computerThrew: -1,
     userThrew: -1,
     userPaperIcon: "hand paper outline",
@@ -20,22 +20,11 @@ class Game extends PureComponent {
     userScissorsIcon: "hand scissors outline",
     computerPaperIcon: "hand paper outline",
     computeRrockIcon: "hand rock outline",
-    computerScissorsIcon: "hand scissors outline"
+    computerScissorsIcon: "hand scissors outline",
+    userScore: 0,
+    computerScore: 0,
+    winner: ""
   };
-
-  UNSAFE_componentWillUpdate(nextProps, nextState) {
-    if (nextState.userThrew !== -1) {
-      console.log("Will update: ", nextState.userThrew);
-    }
-    // if (
-    //   nextState.gameOnProgress &&
-    //   nextState.selections.computer &&
-    //   nextState.timeLeft === 0
-    // ) {
-    //   // Computer starts playing
-    //   this.computerPlayingAlgorith();
-    // }
-  }
 
   handleStart = () => {
     // Reset state
@@ -47,7 +36,8 @@ class Game extends PureComponent {
       userScissorsIcon: "hand scissors outline",
       computerPaperIcon: "hand paper outline",
       computeRrockIcon: "hand rock outline",
-      computerScissorsIcon: "hand scissors outline"
+      computerScissorsIcon: "hand scissors outline",
+      winner: ""
     });
 
     // Countdown
@@ -57,41 +47,62 @@ class Game extends PureComponent {
     //this.computerPlayingAlgorith();
   };
 
+  handleReset = () => {
+    // Reset state
+    this.setState({
+      gameOnProgress: false,
+      timeLeft: 5,
+      computerThrew: -1,
+      userThrew: -1,
+      userPaperIcon: "hand paper outline",
+      userRockIcon: "hand rock outline",
+      userScissorsIcon: "hand scissors outline",
+      computerPaperIcon: "hand paper outline",
+      computeRrockIcon: "hand rock outline",
+      computerScissorsIcon: "hand scissors outline",
+      userScore: 0,
+      computerScore: 0,
+      winner: ""
+    });
+  };
+
   timeLeftCountdown = () => {
     const self = this;
 
-    let timeLeft = 5;
+    const { timeLeft } = this.state;
 
-    self.setState({
-      timeLeft
-    });
+    let timeLeftUpdated = Object.assign(timeLeft);
 
     let randomNum = Math.floor(Math.random() * 3);
 
     let timeLeftCounter = setInterval(function() {
       // Decrement time left and set progress to true
       self.setState({
-        timeLeft: (timeLeft -= 1),
+        timeLeft: (timeLeftUpdated -= 1),
         gameOnProgress: true
       });
 
       // Computer throwing alogrithm
-      self.computerThrowingingAlgorithm(timeLeft, randomNum);
+      self.computerThrowingingAlgorithm(timeLeftUpdated, randomNum);
 
-      if (timeLeft < 1) {
+      if (timeLeftUpdated < 0) {
         // Clear interval
         clearInterval(timeLeftCounter);
 
         // Reset time left and game state
         self.setState({
+          timeLeft: 5,
           gameOnProgress: false
         });
+
+        // Calculate result
+        self.resultAlgorithm();
       }
     }, 1000);
   };
 
   handleUserThrow = (throwedNum, event) => {
-    console.log("Handle user throw", throwedNum);
+    console.log("User threw: ", throwedNum);
 
     if (throwedNum === 0) {
       this.setState({
@@ -133,9 +144,41 @@ class Game extends PureComponent {
   };
 
   resultAlgorithm = () => {
-    const self = this;
+    const { computerThrew, userThrew, userScore, computerScore } = this.state;
 
-    console.log("XXX: ", self.state);
+    let userScoreUpdated = Object.assign(userScore);
+    let computerScoreUpdated = Object.assign(computerScore);
+
+    if (computerThrew === 0 && userThrew === 1) {
+      this.setState({
+        winner: "computer",
+        computerScore: (computerScoreUpdated += 1)
+      });
+    } else if (computerThrew === 1 && userThrew === 2) {
+      this.setState({
+        winner: "computer",
+        computerScore: (computerScoreUpdated += 1)
+      });
+    } else if (computerThrew === 2 && userThrew === 0) {
+      this.setState({
+        winner: "computer",
+        computerScore: (computerScoreUpdated += 1)
+      });
+    } else if (userThrew === -1) {
+      this.setState({
+        winner: "computer",
+        computerScore: (computerScoreUpdated += 1)
+      });
+    } else if (computerThrew === userThrew) {
+      this.setState({
+        winner: "draw"
+      });
+    } else {
+      this.setState({
+        winner: "user",
+        userScore: (userScoreUpdated += 1)
+      });
+    }
   };
 
   render() {
@@ -147,8 +190,44 @@ class Game extends PureComponent {
       userScissorsIcon,
       computerPaperIcon,
       computeRrockIcon,
-      computerScissorsIcon
+      computerScissorsIcon,
+      userScore,
+      computerScore,
+      winner
     } = this.state;
+
+    // Update header info conditionally
+    const TimeLeftWinnderHeader = () => {
+      if (winner === "") {
+        return (
+          <Header
+            as="h1"
+            color={timeLeft < 1 ? "red" : "green"}
+            textAlign="center"
+          >
+            <Header.Content>{timeLeft}</Header.Content>
+          </Header>
+        );
+      } else if (winner === "user") {
+        return (
+          <Header as="h1" color="green" textAlign="center">
+            <Header.Content>You have won!</Header.Content>
+          </Header>
+        );
+      } else if (winner === "computer") {
+        return (
+          <Header as="h1" color="red" textAlign="center">
+            <Header.Content>You have lost</Header.Content>
+          </Header>
+        );
+      } else if (winner === "draw") {
+        return (
+          <Header as="h1" color="blue" textAlign="center">
+            <Header.Content>It's a draw</Header.Content>
+          </Header>
+        );
+      }
+    };
 
     return (
       <Segment vertical className="game">
@@ -156,11 +235,13 @@ class Game extends PureComponent {
           <Grid columns={1} centered className="instructions">
             <Grid.Column className="button-info" textAlign="center">
               <Message info>
-                <Message.Header>
-                  Clicking the Start button to start plyaing. Go for one of the
-                  options on "User" section before the countdown ends.
+                <Message.Header as="h2" style={{ letterSpacing: "1px" }}>
+                  Clicking Start button to play. Throw your hand desired hand
+                  from "You" section simultaneously when the countdown hits 0.
                 </Message.Header>
-                <Message.Header>Good luck!</Message.Header>
+                <Message.Header as="h1" style={{ letterSpacing: "1px" }}>
+                  Good luck!
+                </Message.Header>
                 {/* <p>Did you know it's been a while?</p> */}
               </Message>
               <Segment padded basic vertical className="actions">
@@ -172,14 +253,13 @@ class Game extends PureComponent {
                 >
                   Play
                 </Button>
-                <Header
-                  as="h1"
-                  color={timeLeft < 1 ? "red" : "grey"}
-                  textAlign="center"
+                <TimeLeftWinnderHeader />
+                <Button
+                  size="huge"
+                  basic
+                  color="grey"
+                  onClick={this.handleReset}
                 >
-                  <Header.Content>{timeLeft}</Header.Content>
-                </Header>
-                <Button size="huge" basic color="grey">
                   Reset game
                 </Button>
               </Segment>
@@ -194,7 +274,7 @@ class Game extends PureComponent {
                   <Card.Header>You</Card.Header>
                   <div className="score">
                     <Header as="h2" style={{ marginBottom: "0" }}>
-                      <Header.Content>0</Header.Content>
+                      <Header.Content>{userScore}</Header.Content>
                     </Header>
                     <Card.Meta>Score</Card.Meta>
                   </div>
@@ -238,7 +318,7 @@ class Game extends PureComponent {
                   <Card.Header>Computer</Card.Header>
                   <div className="score">
                     <Header as="h2" style={{ marginBottom: "0" }}>
-                      <Header.Content>0</Header.Content>
+                      <Header.Content>{computerScore}</Header.Content>
                     </Header>
                     <Card.Meta>Score</Card.Meta>
                   </div>
