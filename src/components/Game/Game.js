@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 import {
   Segment,
   Grid,
@@ -9,28 +9,51 @@ import {
   Icon
 } from "semantic-ui-react";
 
-class Game extends PureComponent {
-  state = {
-    gameOnProgress: false,
-    timeLeft: 5,
-    computerThrew: -1,
-    userThrew: -1,
-    userPaperIcon: "hand paper outline",
-    userRockIcon: "hand rock outline",
-    userScissorsIcon: "hand scissors outline",
-    computerPaperIcon: "hand paper outline",
-    computeRrockIcon: "hand rock outline",
-    computerScissorsIcon: "hand scissors outline",
-    userScore: 0,
-    computerScore: 0,
-    winner: ""
-  };
+class Game extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      gameOnProgress: false,
+      timeLeft: 5,
+      computersThrow: -1,
+      usersThrow: -1,
+      userPaperIcon: "hand paper outline",
+      userRockIcon: "hand rock outline",
+      userScissorsIcon: "hand scissors outline",
+      computerPaperIcon: "hand paper outline",
+      computeRrockIcon: "hand rock outline",
+      computerScissorsIcon: "hand scissors outline",
+      userScore: 0,
+      computerScore: 0,
+      winner: ""
+    };
+  }
+
+  UNSAFE_componentWillUpdate(nextProps, nextState) {
+    console.log(
+      "Component will updated: ",
+      nextState.gameOnProgress + " - " + nextState.timeLeft
+    );
+    if (this.state.timeLeft === 1 && nextState.timeLeft === 0) {
+      if (nextState.gameOnProgress) {
+        console.log(
+          "Component will updated in cond: ",
+          nextState.gameOnProgress + " - " + nextState.timeLeft
+        );
+        let randomNum = Math.floor(Math.random() * 3);
+
+        // Computer throwing alogrithm
+        this.computerThrowingingAlgorithm(randomNum);
+      }
+    }
+  }
 
   handleStart = () => {
     // Reset state
     this.setState({
-      computerThrew: -1,
-      userThrew: -1,
+      gameOnProgress: true,
+      computersThrow: -1,
+      usersThrow: -1,
       userPaperIcon: "hand paper outline",
       userRockIcon: "hand rock outline",
       userScissorsIcon: "hand scissors outline",
@@ -41,10 +64,7 @@ class Game extends PureComponent {
     });
 
     // Countdown
-    this.timeLeftCountdown();
-
-    // Computer starts playing
-    //this.computerPlayingAlgorith();
+    this.countdownTimeLeft();
   };
 
   handleReset = () => {
@@ -52,8 +72,8 @@ class Game extends PureComponent {
     this.setState({
       gameOnProgress: false,
       timeLeft: 5,
-      computerThrew: -1,
-      userThrew: -1,
+      computersThrow: -1,
+      usersThrow: -1,
       userPaperIcon: "hand paper outline",
       userRockIcon: "hand rock outline",
       userScissorsIcon: "hand scissors outline",
@@ -66,24 +86,64 @@ class Game extends PureComponent {
     });
   };
 
-  timeLeftCountdown = () => {
-    const self = this;
+  handleUserThrow = (throwedNum, event) => {
+    console.log("User threw: ", throwedNum);
 
+    if (throwedNum === 0) {
+      this.setState({
+        userPaperIcon: "hand paper",
+        usersThrow: throwedNum,
+        gameOnProgress: false
+      });
+    } else if (throwedNum === 1) {
+      this.setState({
+        userRockIcon: "hand rock",
+        usersThrow: throwedNum,
+        gameOnProgress: false
+      });
+    } else if (throwedNum === 2) {
+      this.setState({
+        userScissorsIcon: "hand scissors",
+        usersThrow: throwedNum,
+        gameOnProgress: false
+      });
+    }
+
+    // If user throws before 5 sec has finished, of course the computre should know what the winning trhow is
     const { timeLeft } = this.state;
 
-    let timeLeftUpdated = Object.assign(timeLeft);
+    if (timeLeft !== 0) {
+      if (throwedNum === 0) {
+        this.setState({
+          computerScissorsIcon: "hand scissors",
+          computersThrow: 2
+        });
+      } else if (throwedNum === 1) {
+        this.setState({
+          computerPaperIcon: "hand paper",
+          computersThrow: 0
+        });
+      } else if (throwedNum === 2) {
+        this.setState({
+          computeRrockIcon: "hand rock",
+          computersThrow: 1
+        });
+      }
+    }
+  };
 
-    let randomNum = Math.floor(Math.random() * 3);
+  countdownTimeLeft = () => {
+    const self = this;
+
+    const { timeLeft, usersThrow } = this.state;
+
+    let timeLeftUpdated = Object.assign(timeLeft);
 
     let timeLeftCounter = setInterval(function() {
       // Decrement time left and set progress to true
       self.setState({
-        timeLeft: (timeLeftUpdated -= 1),
-        gameOnProgress: true
+        timeLeft: (timeLeftUpdated -= 1)
       });
-
-      // Computer throwing alogrithm
-      self.computerThrowingingAlgorithm(timeLeftUpdated, randomNum);
 
       if (timeLeftUpdated < 0) {
         // Clear interval
@@ -96,80 +156,62 @@ class Game extends PureComponent {
         });
 
         // Calculate result
-        self.resultAlgorithm();
+        self.calculateResultAlgorithm();
       }
     }, 1000);
   };
 
-  handleUserThrow = (throwedNum, event) => {
-    console.log("User threw: ", throwedNum);
-
-    if (throwedNum === 0) {
+  computerThrowingingAlgorithm = randomNum => {
+    console.log("Computer random: ", randomNum);
+    if (randomNum === 0) {
       this.setState({
-        userPaperIcon: "hand paper",
-        userThrew: throwedNum
+        computerPaperIcon: "hand paper",
+        computersThrow: randomNum
       });
-    } else if (throwedNum === 1) {
+    } else if (randomNum === 1) {
       this.setState({
-        userRockIcon: "hand rock",
-        userThrew: throwedNum
+        computeRrockIcon: "hand rock",
+        computersThrow: randomNum
       });
-    } else if (throwedNum === 2) {
+    } else if (randomNum === 2) {
       this.setState({
-        userScissorsIcon: "hand scissors",
-        userThrew: throwedNum
+        computerScissorsIcon: "hand scissors",
+        computersThrow: randomNum
       });
     }
   };
 
-  computerThrowingingAlgorithm = (timeLeft, randomNum) => {
-    if (timeLeft === 0) {
-      if (randomNum === 0) {
-        this.setState({
-          computerPaperIcon: "hand paper",
-          computerThrew: randomNum
-        });
-      } else if (randomNum === 1) {
-        this.setState({
-          computeRrockIcon: "hand rock",
-          computerThrew: randomNum
-        });
-      } else if (randomNum === 2) {
-        this.setState({
-          computerScissorsIcon: "hand scissors",
-          computerThrew: randomNum
-        });
-      }
-    }
-  };
-
-  resultAlgorithm = () => {
-    const { computerThrew, userThrew, userScore, computerScore } = this.state;
+  calculateResultAlgorithm = () => {
+    const { computersThrow, usersThrow, userScore, computerScore } = this.state;
 
     let userScoreUpdated = Object.assign(userScore);
     let computerScoreUpdated = Object.assign(computerScore);
 
-    if (computerThrew === 0 && userThrew === 1) {
+    if (computersThrow === 0 && usersThrow === 1) {
       this.setState({
         winner: "computer",
         computerScore: (computerScoreUpdated += 1)
       });
-    } else if (computerThrew === 1 && userThrew === 2) {
+    } else if (computersThrow === 1 && usersThrow === 2) {
       this.setState({
         winner: "computer",
         computerScore: (computerScoreUpdated += 1)
       });
-    } else if (computerThrew === 2 && userThrew === 0) {
+    } else if (computersThrow === 2 && usersThrow === 0) {
       this.setState({
         winner: "computer",
         computerScore: (computerScoreUpdated += 1)
       });
-    } else if (userThrew === -1) {
+    } else if (usersThrow === -1) {
       this.setState({
         winner: "computer",
         computerScore: (computerScoreUpdated += 1)
       });
-    } else if (computerThrew === userThrew) {
+    } else if (usersThrow === -1 && computersThrow === -1) {
+      this.setState({
+        winner: "draw"
+      });
+    } else if (computersThrow === usersThrow) {
       this.setState({
         winner: "draw"
       });
@@ -179,6 +221,7 @@ class Game extends PureComponent {
         userScore: (userScoreUpdated += 1)
       });
     }
+    console.log("----------------------------------");
   };
 
   render() {
