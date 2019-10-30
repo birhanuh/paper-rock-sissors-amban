@@ -24,7 +24,9 @@ class Game extends PureComponent {
   };
 
   UNSAFE_componentWillUpdate(nextProps, nextState) {
-    console.log("Was updated", !!nextState);
+    if (nextState.userThrew !== -1) {
+      console.log("Will update: ", nextState.userThrew);
+    }
     // if (
     //   nextState.gameOnProgress &&
     //   nextState.selections.computer &&
@@ -74,24 +76,7 @@ class Game extends PureComponent {
       });
 
       // Computer throwing alogrithm
-      if (timeLeft === 0) {
-        if (randomNum === 0) {
-          self.setState({
-            computerPaperIcon: "hand paper",
-            computerThrew: randomNum
-          });
-        } else if (randomNum === 1) {
-          self.setState({
-            computeRrockIcon: "hand rock",
-            computerThrew: randomNum
-          });
-        } else if (randomNum === 2) {
-          self.setState({
-            computerScissorsIcon: "hand scissors",
-            computerThrew: randomNum
-          });
-        }
-      }
+      self.computerThrowingingAlgorithm(timeLeft, randomNum);
 
       if (timeLeft < 1) {
         // Clear interval
@@ -126,69 +111,31 @@ class Game extends PureComponent {
     }
   };
 
-  computerPlayingAlgorith = () => {
-    const self = this;
-
-    const { gameOnProgress, timeLeft } = this.state;
-
-    let randomNum = Math.floor(Math.random() * 3);
-
-    let trickUser = setInterval(function() {
-      console.log("XXX: ", randomNum, gameOnProgress);
-      if (gameOnProgress && timeLeft === 0) {
-        if (randomNum === 0) {
-          self.setState({
-            computerPaperIcon: "hand paper"
-          });
-        } else if (randomNum === 1) {
-          self.setState({
-            computeRrockIcon: "hand rock"
-          });
-        } else if (randomNum === 2) {
-          self.setState({
-            computerScissorsIcon: "hand scissors"
-          });
-        }
-      } else {
-        // Clear interval
-        clearInterval(trickUser);
+  computerThrowingingAlgorithm = (timeLeft, randomNum) => {
+    if (timeLeft === 0) {
+      if (randomNum === 0) {
+        this.setState({
+          computerPaperIcon: "hand paper",
+          computerThrew: randomNum
+        });
+      } else if (randomNum === 1) {
+        this.setState({
+          computeRrockIcon: "hand rock",
+          computerThrew: randomNum
+        });
+      } else if (randomNum === 2) {
+        this.setState({
+          computerScissorsIcon: "hand scissors",
+          computerThrew: randomNum
+        });
       }
-    }, 10000);
+    }
   };
 
-  computerOpponentTrickingAlgorithm = () => {
+  resultAlgorithm = () => {
     const self = this;
 
-    console.log("XXXddd", self.state.gameOnProgress);
-    let trickUser = setInterval(function() {
-      let randomNum = Math.floor(Math.random() * 3);
-
-      console.log("XXX: ", randomNum);
-      if (self.state.gameOnProgress) {
-        if (randomNum === 0) {
-          self.setState({
-            computerPaperIcon: "hand paper",
-            computeRrockIcon: "hand rock outline",
-            computerScissorsIcon: "hand scissors outline"
-          });
-        } else if (randomNum === 1) {
-          self.setState({
-            computerPaperIcon: "hand paper outline",
-            computeRrockIcon: "hand rock",
-            computerScissorsIcon: "hand scissors outline"
-          });
-        } else if (randomNum === 2) {
-          self.setState({
-            computerPaperIcon: "hand paper outline",
-            computeRrockIcon: "hand rock outline",
-            computerScissorsIcon: "hand scissors"
-          });
-        }
-      } else {
-        // Clear interval
-        clearInterval(trickUser);
-      }
-    }, 10000);
+    console.log("XXX: ", self.state);
   };
 
   render() {
