@@ -120,17 +120,20 @@ class Game extends Component {
       if (throwedNum === 0) {
         this.setState({
           computerScissorsIcon: "hand scissors",
-          computersThrow: 2
+          computersThrow: 2,
+          timeLeft: 0
         });
       } else if (throwedNum === 1) {
         this.setState({
           computerPaperIcon: "hand paper",
-          computersThrow: 0
+          computersThrow: 0,
+          timeLeft: 0
         });
       } else if (throwedNum === 2) {
         this.setState({
           computeRrockIcon: "hand rock",
-          computersThrow: 1
+          computersThrow: 1,
+          timeLeft: 0
         });
       }
     }
@@ -139,7 +142,7 @@ class Game extends Component {
   countdownTimeLeft = () => {
     const self = this;
 
-    const { timeLeft, usersThrow } = this.state;
+    const { timeLeft } = this.state;
 
     let timeLeftUpdated = Object.assign(timeLeft);
 
@@ -332,7 +335,7 @@ class Game extends Component {
                   <Card.Group itemsPerRow={1} textAlign="center">
                     <Segment padded basic vertical>
                       <Icon
-                        color="grey"
+                        color="teal"
                         disabled={!gameOnProgress}
                         name={userPaperIcon}
                         size="huge"
@@ -341,7 +344,7 @@ class Game extends Component {
                     </Segment>
                     <Segment padded basic vertical>
                       <Icon
-                        color="grey"
+                        color="teal"
                         disabled={!gameOnProgress}
                         name={userRockIcon}
                         size="huge"
@@ -350,7 +353,7 @@ class Game extends Component {
                     </Segment>
                     <Segment padded basic vertical>
                       <Icon
-                        color="grey"
+                        color="teal"
                         disabled={!gameOnProgress}
                         name={userScissorsIcon}
                         size="huge"
@@ -375,14 +378,14 @@ class Game extends Component {
                 <Card.Content>
                   <Card.Group itemsPerRow={1} textAlign="center">
                     <Segment padded basic vertical>
-                      <Icon color="grey" name={computerPaperIcon} size="huge" />
+                      <Icon color="teal" name={computerPaperIcon} size="huge" />
                     </Segment>
                     <Segment padded basic vertical>
-                      <Icon color="grey" name={computeRrockIcon} size="huge" />
+                      <Icon color="teal" name={computeRrockIcon} size="huge" />
                     </Segment>
                     <Segment padded basic vertical>
                       <Icon
-                        color="grey"
+                        color="teal"
                         name={computerScissorsIcon}
                         size="huge"
                       />
