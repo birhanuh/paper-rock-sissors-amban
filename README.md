@@ -1,8 +1,10 @@
 ### How to run the project and play
 
 #### Running the project
-+ Clone the project you local machine.
-+ Install dependencies with **npm install** and run with **npm start**
+
+- Clone the project you local machine.
+- Install dependencies with **npm install** and run with **npm start**
 
 #### How to play
-+ Press one of the three icons when the game starts  
+
+- Throw your winning hand of the three forms under "You" quadrant SIMULTANEOUSLY when the countdown hits 0

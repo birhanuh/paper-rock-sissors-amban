@@ -1,11 +1,11 @@
 import React, { PureComponent } from "react";
-import { Header, Icon, Container } from "semantic-ui-react";
+import { Header, Icon, Container, Segment } from "semantic-ui-react";
 import Game from "./Game";
 
 class Page extends PureComponent {
   render() {
     return (
-      <section className="ui container stackable" style={{ marginTop: "6em" }}>
+      <section className="ui container stackable" style={{ marginTop: "3em" }}>
         <header className="haeder">
           <Container textAlign="center">
             <Header as="h1" icon color="teal" textAlign="center">
@@ -18,7 +18,9 @@ class Page extends PureComponent {
           <Game />
         </main>
         <footer>
-          <small>Copyright © Birhanu Hailemariam (developer). 2019</small>
+          <Segment padded basic vertical textAlign="center">
+            <small>Copyright © Birhanu Hailemariam [developer]. 2019</small>
+          </Segment>
         </footer>
       </section>
     );
