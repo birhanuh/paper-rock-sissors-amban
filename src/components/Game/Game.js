@@ -68,22 +68,26 @@ class Game extends Component {
   };
 
   handleReset = () => {
-    // Reset state
-    this.setState({
-      gameOnProgress: false,
-      timeLeft: 5,
-      computersThrow: -1,
-      usersThrow: -1,
-      userPaperIcon: "hand paper outline",
-      userRockIcon: "hand rock outline",
-      userScissorsIcon: "hand scissors outline",
-      computerPaperIcon: "hand paper outline",
-      computeRrockIcon: "hand rock outline",
-      computerScissorsIcon: "hand scissors outline",
-      userScore: 0,
-      computerScore: 0,
-      winner: ""
-    });
+    const { gameOnProgress } = this.state;
+
+    if (!gameOnProgress) {
+      // Reset state
+      this.setState({
+        gameOnProgress: false,
+        timeLeft: 5,
+        computersThrow: -1,
+        usersThrow: -1,
+        userPaperIcon: "hand paper outline",
+        userRockIcon: "hand rock outline",
+        userScissorsIcon: "hand scissors outline",
+        computerPaperIcon: "hand paper outline",
+        computeRrockIcon: "hand rock outline",
+        computerScissorsIcon: "hand scissors outline",
+        userScore: 0,
+        computerScore: 0,
+        winner: ""
+      });
+    }
   };
 
   handleUserThrow = (throwedNum, event) => {
@@ -109,7 +113,7 @@ class Game extends Component {
       });
     }
 
-    // If user throws before 5 sec has finished, of course the computre should know what the winning trhow is
+    // If user throws before 5 sec is up, of course the computre should know what the winning throw shuold be
     const { timeLeft } = this.state;
 
     if (timeLeft !== 0) {
@@ -302,6 +306,7 @@ class Game extends Component {
                   size="huge"
                   basic
                   color="grey"
+                  disabled={gameOnProgress}
                   onClick={this.handleReset}
                 >
                   Reset game
