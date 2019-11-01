@@ -9,4 +9,4 @@
 
 - Throw your winning hand of the three forms under "You" quadrant SIMULTANEOUSLY when the countdown hits 0
 
-**Link:** https://paper-rock-scissors-birhanu.netlify.com/
+**Link:** https://paper-rock-scissors-amban.netlify.com/

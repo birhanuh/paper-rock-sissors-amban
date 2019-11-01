@@ -10,7 +10,7 @@ class Page extends PureComponent {
           <Container textAlign="center">
             <Header as="h1" icon color="teal" textAlign="center">
               <Icon name="game" circular />
-              <Header.Content>Paper rock sissors</Header.Content>
+              <Header.Content>Paper rock sicssors</Header.Content>
             </Header>
           </Container>
         </header>

@@ -161,7 +161,7 @@ class Game extends Component {
       //  self.computerDeceivingAlgorithm(timeLeft);
       //}
 
-      if (timeLeft < 1 || !gameOnProgress) {
+      if (timeLeft < 0 || !gameOnProgress) {
         // Clear interval
         clearInterval(timeLeftCounter);
 
@@ -313,7 +313,8 @@ class Game extends Component {
               <Message info>
                 <Message.Header as="h2" style={{ letterSpacing: "1px" }}>
                   Clicking Start button to play. Throw your supposedly winner
-                  hand shape from "You" quadrant before countdown hits 0.
+                  hand shape from "You" quadrant SIMULTANEOUSLY when the
+                  countdown hits 0.
                 </Message.Header>
                 <Message.Header as="h1" style={{ letterSpacing: "1px" }}>
                   Good luck!
