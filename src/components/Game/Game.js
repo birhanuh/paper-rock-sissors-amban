@@ -120,8 +120,6 @@ class Game extends Component {
       if (throwedNum === 0) {
         this.setState({
           computerScissorsIcon: "hand scissors",
-          computerPaperIcon: "hand paper outline", // Reset deceiving algorithm throwings
-          computeRrockIcon: "hand rock outline", // Reset deceiving algorithm throwings
           computersThrow: 2,
           timeLeft: 0,
           gameOnProgress: false
@@ -129,8 +127,6 @@ class Game extends Component {
       } else if (throwedNum === 1) {
         this.setState({
           computerPaperIcon: "hand paper",
-          computeRrockIcon: "hand rock outline", // Reset deceiving algorithm throwings
-          computerScissorsIcon: "hand scissors outline", // Reset deceiving algorithm throwings
           computersThrow: 0,
           timeLeft: 0,
           gameOnProgress: false
@@ -138,8 +134,6 @@ class Game extends Component {
       } else if (throwedNum === 2) {
         this.setState({
           computeRrockIcon: "hand rock",
-          computerPaperIcon: "hand paper outline", // Reset deceiving algorithm throwings
-          computeRrockIcon: "hand rock outline", // Reset deceiving algorithm throwings
           computersThrow: 1,
           timeLeft: 0,
           gameOnProgress: false
@@ -154,11 +148,6 @@ class Game extends Component {
     let timeLeft = 5;
     const { gameOnProgress } = self.state;
 
-    // Deceive user just from the very start
-    if (timeLeft > 1) {
-      self.computerDeceivingAlgorithm(timeLeft);
-    }
-
     let timeLeftCounter = setInterval(function() {
       // Decrement time left and set progress to true
       self.setState({
@@ -168,9 +157,9 @@ class Game extends Component {
       const { gameOnProgress } = self.state;
 
       // Continue deceiving if the game is still on
-      if (timeLeft > 1 && gameOnProgress) {
-        self.computerDeceivingAlgorithm(timeLeft);
-      }
+      //if (timeLeft > 1 && gameOnProgress) {
+      //  self.computerDeceivingAlgorithm(timeLeft);
+      //}
 
       if (timeLeft < 0 || !gameOnProgress) {
         // Clear interval
