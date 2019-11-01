@@ -43,7 +43,7 @@ class Game extends Component {
         let randomNum = Math.floor(Math.random() * 3);
 
         // Computer throwing alogrithm
-        this.computerThrowingingAlgorithm(randomNum);
+        this.computerThrowingAlgorithm(randomNum);
       }
     }
   }
@@ -91,7 +91,7 @@ class Game extends Component {
   };
 
   handleUserThrow = (throwedNum, event) => {
-    console.log("User threw: ", throwedNum);
+    console.log("User's throw: ", throwedNum);
 
     if (throwedNum === 0) {
       this.setState({
@@ -120,20 +120,29 @@ class Game extends Component {
       if (throwedNum === 0) {
         this.setState({
           computerScissorsIcon: "hand scissors",
+          computerPaperIcon: "hand paper outline", // Reset deceiving algorithm throwings
+          computeRrockIcon: "hand rock outline", // Reset deceiving algorithm throwings
           computersThrow: 2,
-          timeLeft: 0
+          timeLeft: 0,
+          gameOnProgress: false
         });
       } else if (throwedNum === 1) {
         this.setState({
           computerPaperIcon: "hand paper",
+          computeRrockIcon: "hand rock outline", // Reset deceiving algorithm throwings
+          computerScissorsIcon: "hand scissors outline", // Reset deceiving algorithm throwings
           computersThrow: 0,
-          timeLeft: 0
+          timeLeft: 0,
+          gameOnProgress: false
         });
       } else if (throwedNum === 2) {
         this.setState({
           computeRrockIcon: "hand rock",
+          computerPaperIcon: "hand paper outline", // Reset deceiving algorithm throwings
+          computeRrockIcon: "hand rock outline", // Reset deceiving algorithm throwings
           computersThrow: 1,
-          timeLeft: 0
+          timeLeft: 0,
+          gameOnProgress: false
         });
       }
     }
@@ -142,17 +151,28 @@ class Game extends Component {
   countdownTimeLeft = () => {
     const self = this;
 
-    const { timeLeft } = this.state;
+    let timeLeft = 5;
+    const { gameOnProgress } = self.state;
 
-    let timeLeftUpdated = Object.assign(timeLeft);
+    // Deceive user just from the very start
+    if (timeLeft > 1) {
+      self.computerDeceivingAlgorithm(timeLeft);
+    }
 
     let timeLeftCounter = setInterval(function() {
       // Decrement time left and set progress to true
       self.setState({
-        timeLeft: (timeLeftUpdated -= 1)
+        timeLeft: (timeLeft -= 1)
       });
 
-      if (timeLeftUpdated < 0) {
+      const { gameOnProgress } = self.state;
+
+      // Continue deceiving if the game is still on
+      if (timeLeft > 1 && gameOnProgress) {
+        self.computerDeceivingAlgorithm(timeLeft);
+      }
+
+      if (timeLeft < 0 || !gameOnProgress) {
         // Clear interval
         clearInterval(timeLeftCounter);
 
@@ -168,8 +188,8 @@ class Game extends Component {
     }, 1000);
   };
 
-  computerThrowingingAlgorithm = randomNum => {
-    console.log("Computer random: ", randomNum);
+  computerThrowingAlgorithm = randomNum => {
+    console.log("Computers' random: ", randomNum);
     if (randomNum === 0) {
       this.setState({
         computerPaperIcon: "hand paper",
@@ -184,6 +204,23 @@ class Game extends Component {
       this.setState({
         computerScissorsIcon: "hand scissors",
         computersThrow: randomNum
+      });
+    }
+  };
+
+  // Deceive user by flash throwing
+  computerDeceivingAlgorithm = randomNum => {
+    if (randomNum % 2 === 1) {
+      this.setState({
+        computerPaperIcon: "hand paper",
+        computeRrockIcon: "hand rock",
+        computerScissorsIcon: "hand scissors"
+      });
+    } else if (randomNum % 2 === 0) {
+      this.setState({
+        computerPaperIcon: "hand paper outline",
+        computeRrockIcon: "hand rock outline",
+        computerScissorsIcon: "hand scissors outline"
       });
     }
   };
