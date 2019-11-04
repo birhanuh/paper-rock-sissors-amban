@@ -402,15 +402,26 @@ class Action extends Component {
                 <Card.Content>
                   <Card.Group itemsPerRow={1} textAlign="center">
                     <Segment padded basic vertical>
-                      <Icon color="teal" name={computerPaperIcon} size="huge" />
+                      <Icon
+                        color="teal"
+                        name={computerPaperIcon}
+                        disabled={true}
+                        size="huge"
+                      />
                     </Segment>
                     <Segment padded basic vertical>
-                      <Icon color="teal" name={computeRrockIcon} size="huge" />
+                      <Icon
+                        color="teal"
+                        name={computeRrockIcon}
+                        disabled={true}
+                        size="huge"
+                      />
                     </Segment>
                     <Segment padded basic vertical>
                       <Icon
                         color="teal"
                         name={computerScissorsIcon}
+                        disabled={true}
                         size="huge"
                       />
                     </Segment>
