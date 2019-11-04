@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { Header, Icon, Container, Segment } from "semantic-ui-react";
-import Game from "./Game";
+import Action from "./Action";
 
 class Page extends PureComponent {
   render() {
@@ -15,7 +15,7 @@ class Page extends PureComponent {
           </Container>
         </header>
         <main className="main">
-          <Game />
+          <Action />
         </main>
         <footer>
           <Segment padded basic vertical textAlign="center">

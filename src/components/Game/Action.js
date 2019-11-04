@@ -9,7 +9,7 @@ import {
   Icon
 } from "semantic-ui-react";
 
-class Game extends Component {
+class Action extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -311,14 +311,12 @@ class Game extends Component {
           <Grid columns={1} centered className="instructions">
             <Grid.Column className="button-info" textAlign="center">
               <Message info>
-                <Message.Header as="h2" style={{ letterSpacing: "1px" }}>
+                <Message.Header as="h2">
                   Clicking Start button to play. Throw your supposedly winner
                   hand shape from "You" quadrant SIMULTANEOUSLY when the
                   countdown hits 0.
                 </Message.Header>
-                <Message.Header as="h1" style={{ letterSpacing: "1px" }}>
-                  Good luck!
-                </Message.Header>
+                <Message.Header as="h1">Good luck!</Message.Header>
                 {/* <p>Did you know it's been a while?</p> */}
               </Message>
               <Segment padded basic vertical className="actions">
@@ -427,4 +425,4 @@ class Game extends Component {
   }
 }
 
-export default Game;
+export default Action;
